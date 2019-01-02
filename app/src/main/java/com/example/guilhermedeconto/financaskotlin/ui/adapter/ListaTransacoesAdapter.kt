@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.example.guilhermedeconto.financaskotlin.R
+import com.example.guilhermedeconto.financaskotlin.extension.formatToBrazilianFormat
 import com.example.guilhermedeconto.financaskotlin.model.Transacao
 import kotlinx.android.synthetic.main.transacao_item.view.*
 
@@ -23,7 +24,9 @@ class ListaTransacoesAdapter(transacoes: List<Transacao>, context: Context) : Ba
         val viewCreated = LayoutInflater.from(context).inflate(R.layout.transacao_item, parent, false)
 
         val transacao = transacoes[position]
-        viewCreated.transacao_valor.setText(transacao.getValue().toString())
+        viewCreated.transacao_valor.text = transacao.value.toString()
+        viewCreated.transacao_categoria.text = transacao.category
+        viewCreated.transacao_data.text = transacao.data.formatToBrazilianFormat()
 
         return viewCreated
     }
