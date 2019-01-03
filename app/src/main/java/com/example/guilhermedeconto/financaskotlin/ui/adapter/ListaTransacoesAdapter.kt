@@ -1,13 +1,16 @@
 package com.example.guilhermedeconto.financaskotlin.ui.adapter
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.example.guilhermedeconto.financaskotlin.R
+import com.example.guilhermedeconto.financaskotlin.extension.brlFormat
 import com.example.guilhermedeconto.financaskotlin.extension.formatToBrazilianFormat
 import com.example.guilhermedeconto.financaskotlin.model.Transacao
+import com.example.guilhermedeconto.financaskotlin.model.Type
 import kotlinx.android.synthetic.main.transacao_item.view.*
 
 /**
@@ -24,7 +27,20 @@ class ListaTransacoesAdapter(transacoes: List<Transacao>, context: Context) : Ba
         val viewCreated = LayoutInflater.from(context).inflate(R.layout.transacao_item, parent, false)
 
         val transacao = transacoes[position]
-        viewCreated.transacao_valor.text = transacao.value.toString()
+
+        if (transacao.type == Type.RECIPE) {
+            viewCreated.transacao_valor.setTextColor(ContextCompat.getColor(context, R.color.receita))
+        } else {
+            viewCreated.transacao_valor.setTextColor(ContextCompat.getColor(context, R.color.despesa))
+        }
+
+        if (transacao.type == Type.RECIPE) {
+            viewCreated.transacao_icone.setBackgroundResource(R.drawable.icone_transacao_item_receita)
+        } else {
+            viewCreated.transacao_icone.setBackgroundResource(R.drawable.icone_transacao_item_despesa)
+        }
+
+        viewCreated.transacao_valor.text = transacao.value.brlFormat()
         viewCreated.transacao_categoria.text = transacao.category
         viewCreated.transacao_data.text = transacao.data.formatToBrazilianFormat()
 
@@ -42,4 +58,6 @@ class ListaTransacoesAdapter(transacoes: List<Transacao>, context: Context) : Ba
     override fun getCount(): Int {
         return transacoes.size
     }
+
+
 }
