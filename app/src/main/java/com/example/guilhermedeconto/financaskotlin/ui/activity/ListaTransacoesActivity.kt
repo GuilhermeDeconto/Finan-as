@@ -24,7 +24,10 @@ class ListaTransacoesActivity : AppCompatActivity() {
         findViewById<ListView>(R.id.lista_transacoes_listview)
         val transacoes = listOf(
             Transacao(
-                type = Type.EXPENSE, data = Calendar.getInstance(), value = BigDecimal(20.5)
+                type = Type.EXPENSE,
+                category = "Almoço de final de semana",
+                data = Calendar.getInstance(),
+                value = BigDecimal(20.5)
             ),
             Transacao(value = BigDecimal(100.0), category = "Economia", type = Type.RECIPE),
             Transacao(value = BigDecimal.valueOf(200.0), type = Type.EXPENSE),

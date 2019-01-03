@@ -9,6 +9,7 @@ import android.widget.BaseAdapter
 import com.example.guilhermedeconto.financaskotlin.R
 import com.example.guilhermedeconto.financaskotlin.extension.brlFormat
 import com.example.guilhermedeconto.financaskotlin.extension.formatToBrazilianFormat
+import com.example.guilhermedeconto.financaskotlin.extension.limitString
 import com.example.guilhermedeconto.financaskotlin.model.Transacao
 import com.example.guilhermedeconto.financaskotlin.model.Type
 import kotlinx.android.synthetic.main.transacao_item.view.*
@@ -22,6 +23,7 @@ class ListaTransacoesAdapter(transacoes: List<Transacao>, context: Context) : Ba
 
     private val transacoes = transacoes
     private val context = context
+    private val limitCategory = 14
 
     override fun getView(position: Int, view: View?, parent: ViewGroup?): View {
         val viewCreated = LayoutInflater.from(context).inflate(R.layout.transacao_item, parent, false)
@@ -39,9 +41,13 @@ class ListaTransacoesAdapter(transacoes: List<Transacao>, context: Context) : Ba
         } else {
             viewCreated.transacao_icone.setBackgroundResource(R.drawable.icone_transacao_item_despesa)
         }
+//        var formatedCategory = transacao.category
+//        if (formatedCategory.length > 14) {
+//            formatedCategory = "${formatedCategory.substring(0, 14)}..."
+//        }
 
         viewCreated.transacao_valor.text = transacao.value.brlFormat()
-        viewCreated.transacao_categoria.text = transacao.category
+        viewCreated.transacao_categoria.text = transacao.category.limitString(limitCategory)
         viewCreated.transacao_data.text = transacao.data.formatToBrazilianFormat()
 
         return viewCreated
