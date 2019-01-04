@@ -8,7 +8,8 @@ package com.example.guilhermedeconto.financaskotlin.extension
 
 fun String.limitString(number: Int): String {
     if (this.length > number) {
-        return "${this.substring(0, number)}..."
+        val firstCharacter = 0
+        return "${this.substring(firstCharacter, number)}..."
     }
     return this
 }

@@ -19,38 +19,64 @@ import kotlinx.android.synthetic.main.transacao_item.view.*
  * @author guilherme.deconto@operacao.rcadigital.com.br
  * @since 02/01/2019
  **/
-class ListaTransacoesAdapter(transacoes: List<Transacao>, context: Context) : BaseAdapter() {
-
-    private val transacoes = transacoes
-    private val context = context
+class ListaTransacoesAdapter(private val transacoes: List<Transacao>, private val context: Context) : BaseAdapter() {
     private val limitCategory = 14
 
     override fun getView(position: Int, view: View?, parent: ViewGroup?): View {
         val viewCreated = LayoutInflater.from(context).inflate(R.layout.transacao_item, parent, false)
-
         val transacao = transacoes[position]
-
-        if (transacao.type == Type.RECIPE) {
-            viewCreated.transacao_valor.setTextColor(ContextCompat.getColor(context, R.color.receita))
-        } else {
-            viewCreated.transacao_valor.setTextColor(ContextCompat.getColor(context, R.color.despesa))
-        }
-
-        if (transacao.type == Type.RECIPE) {
-            viewCreated.transacao_icone.setBackgroundResource(R.drawable.icone_transacao_item_receita)
-        } else {
-            viewCreated.transacao_icone.setBackgroundResource(R.drawable.icone_transacao_item_despesa)
-        }
+        addValue(transacao, viewCreated)
+        addIcon(transacao, viewCreated)
 //        var formatedCategory = transacao.category
 //        if (formatedCategory.length > 14) {
 //            formatedCategory = "${formatedCategory.substring(0, 14)}..."
 //        }
-
-        viewCreated.transacao_valor.text = transacao.value.brlFormat()
-        viewCreated.transacao_categoria.text = transacao.category.limitString(limitCategory)
-        viewCreated.transacao_data.text = transacao.data.formatToBrazilianFormat()
-
+        addCategory(viewCreated, transacao)
+        addData(viewCreated, transacao)
         return viewCreated
+    }
+
+    private fun addData(
+        viewCreated: View,
+        transacao: Transacao
+    ) {
+        viewCreated.transacao_data.text = transacao.data.formatToBrazilianFormat()
+    }
+
+    private fun addCategory(
+        viewCreated: View,
+        transacao: Transacao
+    ) {
+        viewCreated.transacao_categoria.text = transacao.category.limitString(limitCategory)
+    }
+
+    private fun addIcon(transacao: Transacao, viewCreated: View) {
+        val icon = iconWith(transacao.type)
+
+        viewCreated.transacao_icone.setBackgroundResource(icon)
+    }
+
+    private fun iconWith(type: Type): Int {
+        if (type == Type.INCOME) {
+            return R.drawable.icone_transacao_item_receita
+        }
+        return R.drawable.icone_transacao_item_despesa
+
+    }
+
+    private fun addValue(transacao: Transacao, viewCreated: View) {
+
+        val color: Int = colorType(transacao.type)
+        viewCreated.transacao_valor.setTextColor(color)
+        viewCreated.transacao_valor.text = transacao.value.brlFormat()
+    }
+
+    private fun colorType(type: Type): Int {
+        if (type == Type.INCOME) {
+            return ContextCompat.getColor(context, R.color.receita)
+        }
+        return ContextCompat.getColor(context, R.color.despesa)
+
     }
 
     override fun getItem(position: Int): Transacao {

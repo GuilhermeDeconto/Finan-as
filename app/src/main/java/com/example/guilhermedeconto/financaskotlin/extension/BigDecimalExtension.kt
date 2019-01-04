@@ -9,10 +9,10 @@ import java.util.Locale
  * @author guilherme.deconto@operacao.rcadigital.com.br
  * @since 03/01/2019
  **/
+
 fun BigDecimal.brlFormat(): String {
     val currencyInstance = DecimalFormat.getCurrencyInstance(Locale("pt", "br"))
 
-    val formatedCurrency = currencyInstance.format(this).replace("R$", "R$ ")
+    return currencyInstance.format(this).replace("R$", "R$ ")
 
-    return formatedCurrency
 }
